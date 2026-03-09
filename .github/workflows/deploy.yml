@@ -18,14 +18,12 @@ jobs:
           cache: 'npm'
 
       - run: npm ci
-      - run: npm run build
-      - run: npm test || echo "No tests configured"
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+      - name: Type Check
+        run: npm run typecheck
+
+      - name: Deploy to Cloudflare Workers
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: blackroad-os-landing-worker
-          directory: ./out
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

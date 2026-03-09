@@ -1,8 +1,6 @@
 name: 🔧 Self-Healing
 
 on:
-  schedule:
-    - cron: '*/30 * * * *'  # Every 30 minutes
   workflow_dispatch:
   workflow_run:
     workflows: ["🚀 Auto Deploy"]
@@ -43,7 +41,6 @@ jobs:
           # Check for common issues
           if [ -f "package.json" ]; then
             npm ci || true
-            npm run build || true
           fi
       
       - name: Create Issue on Failure
